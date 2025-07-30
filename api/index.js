@@ -9,7 +9,7 @@ const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const customerdataRoutes = require('./routes/customerdataRoutes');
-
+const notificationRoutes = require('./routes/notificationRoutes');
 // Initialize the app
 const app = express();
 
@@ -18,14 +18,15 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI) 
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// API routes
+// API routes 
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/customerdata', customerdataRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 module.exports = app;

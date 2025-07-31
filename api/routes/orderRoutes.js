@@ -11,20 +11,24 @@ router.post('/', async (req, res) => {
 
     await newOrder.save();
    // ✅ Send FCM Notification (example using a topic or token)
- const message = {
+const message = {
   notification: {
     title: 'New Order Received',
     body: `Order from ${name || 'Unknown'} - ₹${totalAmount}`,
-    sound: 'notify', // custom sound name (without .mp3)
   },
   android: {
     notification: {
+      channel_id: 'order-alerts-v2',
       sound: 'notify',
-      channel_id: 'order-alerts-v2', // must match the channel created in the app
     },
+  },
+  data: {
+    channelId: 'order-alerts-v2',
+    sound: 'notify',
   },
   topic: 'orders',
 };
+
 
 
     await admin.messaging().send(message);

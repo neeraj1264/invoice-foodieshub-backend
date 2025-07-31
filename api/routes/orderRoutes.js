@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/order');
-const admin = require('../firebaseAdmin'); // import it at the top
+const admin = require('../../firebaseAdmin'); // import it at the top
 
 // Create a new order
 router.post('/', async (req, res) => {

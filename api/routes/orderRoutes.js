@@ -6,8 +6,8 @@ const admin = require('../../firebaseAdmin'); // import it at the top
 // Create a new order
 router.post('/', async (req, res) => {
   try {
-    const { id, products, totalAmount, timestamp, name, phone, address, discount, delivery } = req.body;
-    const newOrder = new Order({ id, products, totalAmount, timestamp, name, phone, address, discount, delivery  });
+    const { id, products, totalAmount, timestamp, name, phone, address, discount, delivery, orderNumber, billNumber, orderType } = req.body;
+    const newOrder = new Order({ id, products, totalAmount, timestamp, name, phone, address, discount, delivery, orderNumber, billNumber, orderType  });
 
     await newOrder.save();
    // ✅ Send FCM Notification (example using a topic or token)

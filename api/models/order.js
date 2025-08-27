@@ -9,7 +9,10 @@ const orderSchema = new mongoose.Schema({
   address: { type: String },
   timestamp: { type: String, required: true },
   discount:{ type: Number, default: 0  },
-  delivery: { type: Number, default: 0  }
+  delivery: { type: Number, default: 0  },
+  cashAmount:{ type: Number, default: 0  },
+  upiAmount: { type: Number, default: 0  },
+  paymentMethod: {type: String,}
 });
 
 const Order = mongoose.model('Order', orderSchema);

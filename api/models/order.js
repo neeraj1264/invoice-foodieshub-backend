@@ -12,7 +12,10 @@ const orderSchema = new mongoose.Schema({
   delivery: { type: Number, default: 0  },
   cashAmount:{ type: Number, default: 0  },
   upiAmount: { type: Number, default: 0  },
-  paymentMethod: {type: String,}
+  paymentMethod: {type: String},
+  orderNumber: {type: String},
+  orderType: {type: String},
+  billNumber: {type: String}
 });
 
 const Order = mongoose.model('Order', orderSchema);

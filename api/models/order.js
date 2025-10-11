@@ -8,14 +8,17 @@ const orderSchema = new mongoose.Schema({
   phone: { type: Number },
   address: { type: String },
   timestamp: { type: String, required: true },
-  discount:{ type: Number, default: 0  },
-  delivery: { type: Number, default: 0  },
-  cashAmount:{ type: Number, default: 0  },
-  upiAmount: { type: Number, default: 0  },
-  paymentMethod: {type: String},
-  orderNumber: {type: String},
-  orderType: {type: String},
-  billNumber: {type: String}
+  saleType: {
+    type: String,
+    enum: ["cash", "credit", "partial"],
+    default: "cash",
+  },
+  paidAmount: { type: Number, default: 0 },
+  creditAmount: { type: Number, default: 0 },
+  discount: { type: Number, default: 0 },
+  delivery: { type: Number, default: 0 },
+  gstAmount: { type: Number, default: 0 },
+  balanceAmount: { type: Number,},
 });
 
 const Order = mongoose.model('Order', orderSchema);

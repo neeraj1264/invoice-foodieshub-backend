@@ -1,41 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/order');
-const admin = require('../../firebaseAdmin'); // import it at the top
 
 // Create a new order
 router.post('/', async (req, res) => {
   try {
-    const { id, products, totalAmount, timestamp, name, phone, address, discount, delivery, cashAmount, upiAmount, paymentMethod, orderNumber, billNumber, orderType } = req.body;
-    const newOrder = new Order({ id, products, totalAmount, timestamp, name, phone, address, discount, delivery, cashAmount, upiAmount, paymentMethod, orderNumber, billNumber, orderType  });
+    const { id, products, totalAmount, timestamp, name, phone, address, saleType, paidAmount , creditAmount , discount , delivery, balanceAmount } = req.body;
+    const newOrder = new Order({ id, products, totalAmount, timestamp, name, phone, address, saleType, paidAmount , creditAmount , discount , delivery, balanceAmount });
 
     await newOrder.save();
-   // ✅ Send FCM Notification (example using a topic or token)
-const message = {
-  notification: {
-    title: 'New Order Received',
-    body: `Order from ${name || 'Unknown'} - ₹${totalAmount}`,
-  },
-  android: {
-    notification: {
-      channel_id: 'order-alerts-v2',
-      sound: 'notify',
-    },
-  },
-  data: {
-    channelId: 'order-alerts-v2',
-    sound: 'notify',
-  },
-  topic: 'orders',
-};
-
-
-
-    await admin.messaging().send(message);
-
     res.status(201).json(newOrder);
   } catch (error) {
-    console.error('Order creation or FCM error:', error);
     res.status(500).json({ message: 'Failed to create order', error });
   }
 });
@@ -55,6 +30,7 @@ router.get('/test', (req, res) => {
     res.status(200).send('Orders test route working');
   });  
   
+module.exports = router;
 
   // Delete an order
   router.delete('/:id', async (req, res) => {
@@ -71,5 +47,3 @@ router.get('/test', (req, res) => {
       res.status(500).json({ message: 'Failed to delete order', error });
     }
   });
-
-  module.exports = router;

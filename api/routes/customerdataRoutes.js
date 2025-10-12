@@ -17,6 +17,13 @@ router.post("/", async (req, res) => {
       transactions,
     } = req.body;
 
+       // Check if a customer with the same phone number already exists
+      const existingCustomer = await CustomerData.findOne({ phone });
+      if (existingCustomer) {
+        console.log(`Customer with phone ${phone} already exists. Skipping addition.`);
+        return res.status(200).json({ message: 'Customer already exists, no changes made.' });
+      }
+
     const phoneStr = String(phone || "").trim();
 
     // Find existing customer

@@ -17,66 +17,57 @@ router.post("/", async (req, res) => {
       transactions,
     } = req.body;
 
-       // Check if a customer with the same phone number already exists
-      const existingCustomer = await CustomerData.findOne({ phone });
-      if (existingCustomer) {
-        console.log(`Customer with phone ${phone} already exists. Skipping addition.`);
-        return res.status(200).json({ message: 'Customer already exists, no changes made.' });
-      }
-
     const phoneStr = String(phone || "").trim();
 
-    // Find existing customer
+    // Check if a customer with the same phone number already exists
     let customer = await CustomerData.findOne({ phone: phoneStr });
-
-    // If no customer, create new with supplied totals and mark order processed
-    if (!customer) {
-      const newCustomer = new CustomerData({
-        id,
-        name,
-        phone: phoneStr,
-        address,
-        email,
-        timestamp: timestamp || new Date().toISOString(),
-        totalCash: Number(paidAmount || 0),
-        totalOwed: Number(creditAmount || 0),
-        totalAmount: Number(paidAmount || 0) + Number(creditAmount || 0),
-        transactions,
+    
+    if (customer) {
+      console.log(`Customer with phone ${phone} already exists. Updating customer.`);
+      
+      // Update customer details if provided
+      if (name) customer.name = name;
+      if (address) customer.address = address;
+      if (email) customer.email = email;
+      
+      // Increment totals
+      customer.totalCash = (customer.totalCash || 0) + Number(paidAmount || 0);
+      customer.totalOwed = (customer.totalOwed || 0) + Number(creditAmount || 0);
+      customer.totalAmount = (customer.totalCash || 0) + (customer.totalOwed || 0);
+      
+      await customer.save();
+      return res.status(200).json({ 
+        message: "Customer updated with new order", 
+        customer 
       });
-
-      await newCustomer.save();
-      return res
-        .status(201)
-        .json({ message: "Customer added", customer: newCustomer });
     }
 
-    // If customer exists, check if order already processed
-    // if (id && Array.isArray(customer.processedOrders) && customer.processedOrders.includes(String(id))) {
-    //   return res.status(200).json({ message: 'Order already processed for this customer, no changes made.' });
-    // }
+    // If no customer exists, create new one
+    const newCustomer = new CustomerData({
+      id,
+      name,
+      phone: phoneStr,
+      address,
+      email,
+      timestamp: timestamp || new Date().toISOString(),
+      totalCash: Number(paidAmount || 0),
+      totalOwed: Number(creditAmount || 0),
+      totalAmount: Number(paidAmount || 0) + Number(creditAmount || 0),
+      transactions,
+    });
 
-    // Update customer details (name/address/email) if provided
-    if (name) customer.name = name;
-    if (address) customer.address = address;
-    if (email) customer.email = email;
+    await newCustomer.save();
+    return res.status(201).json({ 
+      message: "Customer added", 
+      customer: newCustomer 
+    });
 
-    // Increment totals
-    customer.totalCash = (customer.totalCash || 0) + Number(paidAmount || 0);
-    customer.totalOwed = (customer.totalOwed || 0) + Number(creditAmount || 0);
-    customer.totalAmount =
-      (customer.totalCash || 0) + (customer.totalOwed || 0);
-
-    // Mark order as processed
-    // if (id) {
-    //   customer.processedOrders = customer.processedOrders || [];
-    //   customer.processedOrders.push(String(id));
-    // }
-
-    await customer.save();
-    return res.status(200).json({ message: "Customer updated", customer });
   } catch (error) {
     console.error("Error saving/updating customer:", error);
-    return res.status(500).json({ message: "Failed to save customer", error });
+    return res.status(500).json({ 
+      message: "Failed to save customer", 
+      error: error.message 
+    });
   }
 });
 
@@ -87,7 +78,10 @@ router.get("/", async (req, res) => {
     res.status(200).json(customers);
   } catch (error) {
     console.error("Error fetching customer data:", error);
-    res.status(500).json({ message: "Failed to fetch customer data", error });
+    res.status(500).json({ 
+      message: "Failed to fetch customer data", 
+      error: error.message 
+    });
   }
 });
 
@@ -141,7 +135,10 @@ router.delete("/:customerId/transactions/:transactionId", async (req, res) => {
     res.json({ message: "Transaction deleted successfully", customer });
   } catch (err) {
     console.error("Error deleting transaction:", err);
-    res.status(500).json({ message: "Failed to delete transaction", error: err.message });
+    res.status(500).json({ 
+      message: "Failed to delete transaction", 
+      error: err.message 
+    });
   }
 });
 

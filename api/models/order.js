@@ -19,6 +19,9 @@ const orderSchema = new mongoose.Schema({
   delivery: { type: Number, default: 0 },
   gstAmount: { type: Number, default: 0 },
   balanceAmount: { type: Number,},
+  orderNumber: { type: String }, 
+  billNumber: { type: String },
+  orderType: {type: String},
 });
 
 const Order = mongoose.model('Order', orderSchema);

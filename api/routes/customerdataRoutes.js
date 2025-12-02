@@ -97,9 +97,9 @@ router.put("/:id", async (req, res) => {
     }
 
     if (type === "gave") {
-      customer.lifetimeSale += amount; // sale increased
+      customer.youwillget += amount; // sale increased
     } else if (type === "received") {
-      customer.receivedAmount += amount; // payment received
+      customer.youwillgave += amount; // payment received
     }
 
     customer.transactions.push({ type, amount, description });
@@ -122,10 +122,10 @@ router.delete("/:customerId/transactions/:transactionId", async (req, res) => {
     if (!transaction) return res.status(404).json({ message: "Transaction not found" });
 
     // Adjust totals based on deleted transaction
-    if (transaction.type === "gave") {
-      customer.lifetimeSale -= transaction.amount;
+     if (transaction.type === "gave") {
+      customer.youwillget -= transaction.amount;
     } else if (transaction.type === "received") {
-      customer.receivedAmount -= transaction.amount;
+      customer.youwillgave -= transaction.amount;
     }
 
     // Remove the transaction

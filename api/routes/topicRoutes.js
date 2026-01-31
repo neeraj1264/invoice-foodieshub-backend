@@ -47,10 +47,24 @@ router.post("/", async (req, res) => {
     if (exists) {
       return res.status(400).json({ message: "Topic already exists" });
     }
+    const generateUniqueSlug = async (baseSlug) => {
+      let slug = baseSlug;
+      let counter = 1;
+    
+      while (await Topic.findOne({ slug })) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+    
+      return slug;
+    };
 
+    const baseSlug = slug;
+    const uniqueSlug = await generateUniqueSlug(baseSlug);
+    
     const topic = await Topic.create({
       title,
-      slug,
+      slug: uniqueSlug,
       icon,
       content: {
         theory: content.theory || "",

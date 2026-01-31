@@ -37,9 +37,9 @@ router.post("/", async (req, res) => {
   try {
     const { title, icon, slug, content } = req.body;
 
-    if (!title || !slug || !icon || !content?.theory) {
+    if (!title || !slug  ) {
       return res.status(400).json({
-        message: "Title, slug, icon and theory are required",
+        message: "Title and slug are required",
       });
     }
 
@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
       slug,
       icon,
       content: {
-        theory: content.theory,
+        theory: content.theory || "",
         questions: content.questions || [],
         steps: content.steps || [],
       },

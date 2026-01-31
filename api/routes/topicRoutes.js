@@ -3,6 +3,18 @@ const Topic = require("../models/Topic");
 
 const router = express.Router();
 
+const generateUniqueSlug = async (baseSlug) => {
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (await Topic.findOne({ slug })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
+  return slug;
+};
+
 // GET all topics (list)
 router.get("/", async (req, res) => {
   try {
@@ -43,24 +55,7 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const exists = await Topic.findOne({ slug });
-    if (exists) {
-      return res.status(400).json({ message: "Topic already exists" });
-    }
-    const generateUniqueSlug = async (baseSlug) => {
-      let slug = baseSlug;
-      let counter = 1;
-    
-      while (await Topic.findOne({ slug })) {
-        slug = `${baseSlug}-${counter}`;
-        counter++;
-      }
-    
-      return slug;
-    };
-
-    const baseSlug = slug;
-    const uniqueSlug = await generateUniqueSlug(baseSlug);
+    const uniqueSlug = await generateUniqueSlug(slug);
     
     const topic = await Topic.create({
       title,

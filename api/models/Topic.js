@@ -1,12 +1,47 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+
+const questionSchema = new mongoose.Schema(
+  {
+    question: { type: String },
+    answer: { type: String },
+  },
+);
 
 const topicSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    icon: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
-    pdf: { type: String, required: true },
-  });
+    title: {
+      type: String,
+      trim: true,
+    },
 
-const Topic = mongoose.model('Topic', topicSchema);
-module.exports = Topic;
+    slug: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    icon: {
+      type: String,
+    },
+
+    content: {
+      theory: {
+        type: String,
+      },
+
+      questions: {
+        type: [questionSchema],
+        default: [],
+      },
+
+      steps: {
+        type: [String],
+        default: [],
+      },
+    },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Topic", topicSchema);

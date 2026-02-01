@@ -10,6 +10,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const customerdataRoutes = require('./routes/customerdataRoutes');
 const topicRoutes = require("./routes/topicRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 // Initialize the app
 const app = express();
@@ -29,4 +30,6 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/customerdata', customerdataRoutes);
 app.use("/api/topics", topicRoutes);
+app.use("/api/reviews", reviewRoutes);
+
 module.exports = app;

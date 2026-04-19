@@ -36,21 +36,21 @@ router.post("/", async (req, res) => {
     await transporter.sendMail({
       from: `"Barclays Accounting" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "We received your enquiry | Barclays Accounting",
+      subject: "We received your enquiry | Barclays Accounting & Bookkeeping",
       html: `
         <h3>Hi ${name},</h3>
 
         <p>Thank you for contacting <b>Barclays Accounting & Bookkeeping</b>.</p>
 
-        <p>We have received your enquiry and one of our team members will contact you within <b>24 hours</b>.</p>
+        <p>We have received your enquiry and one of our team members will contact you <b>Shortly</b>.</p>
 
-        <p>If your request is urgent, feel free to reply to this email.</p>
+        <p>If your request is urgent, please call us on <b>+61 411 873 522</b> or simply reply to this email</p>
 
         <br/>
 
         <p>Best regards,<br/>
-        Barclays Accounting & Bookkeeping
-        📞 +61 411 873 522
+        Barclays Accounting & Bookkeeping<br/>
+        📞 +61 411 873 522<br/>
         📧 info@barclayspartners.com.au</p>
       `,
     });

@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
       from: `"Contact Form" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       replyTo: email,
-      subject: "New Contact Form Submission",
+      subject: `New enquiry from ${name} | Barclays Accounting Website`,
       html: `
         <h2>New Contact Request</h2>
         <p><b>Name:</b> ${name}</p>
